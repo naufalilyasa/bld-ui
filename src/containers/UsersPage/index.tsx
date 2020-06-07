@@ -1,9 +1,11 @@
 import React from 'react';
 
+import UserDataTable from '../../components/UserDataTable';
+
 const StudentsPage: React.FC<{}> = () => {
   return (
     <div>
-      Hello from StudentsPage
+      <UserDataTable data={[]}/>
     </div>
   );
 };

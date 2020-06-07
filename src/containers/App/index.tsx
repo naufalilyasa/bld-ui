@@ -15,21 +15,25 @@ import SignInPage from '../SignInPage';
 import SignUpPage from '../SignUpPage';
 import Dashboard from '../Dashboard';
 
+import {CredentialStoreProvider} from '../../contexts/CredentialStoreContext';
+
 
 const App: React.FC<{}> = () => {
   return (
-    <ThemeProvider theme={LightTheme}>
-      <CssBaseline/>
-      <Router>
-        <Switch>
-          <Redirect exact from="/" to="/app/dashboard"/>
-          <Route path="/app/dashboard" component={Dashboard}/>
-          <Route path="/auth/signin" component={SignInPage}/>
-          <Route path="/auth/signup" component={SignUpPage}/>
-          <Route component={NotFoundPage}/>
-        </Switch>
-      </Router>
-    </ThemeProvider>
+    <CredentialStoreProvider>
+      <ThemeProvider theme={LightTheme}>
+        <CssBaseline/>
+        <Router>
+          <Switch>
+            <Redirect exact from="/" to="/app/dashboard"/>
+            <Route path="/app/dashboard" component={Dashboard}/>
+            <Route path="/auth/signin" component={SignInPage}/>
+            <Route path="/auth/signup" component={SignUpPage}/>
+            <Route component={NotFoundPage}/>
+          </Switch>
+        </Router>
+      </ThemeProvider>
+    </CredentialStoreProvider>
   );
 };
 

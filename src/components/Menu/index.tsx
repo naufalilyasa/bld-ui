@@ -42,7 +42,7 @@ const Menu: React.FC<{}> = (props) => {
   return (
     <React.Fragment>
       <Box padding={2}>
-        <Grid container spacing={2}>
+        <Grid container alignItems="center" spacing={2}>
           <Grid item>
             <Avatar className={classes.avatar}>A</Avatar>
           </Grid>
@@ -77,25 +77,14 @@ const Menu: React.FC<{}> = (props) => {
         </ListItem>
         <ListItem
           button
-          selected={location.pathname === '/app/dashboard/lecturers'}
+          selected={location.pathname === '/app/dashboard/users'}
           component={AdapterLink}
-          to="/app/dashboard/lecturers"
+          to="/app/dashboard/users"
         >
           <ListItemIcon>
             <PeopleIcon/>
           </ListItemIcon>
-          <ListItemText>Lecturers</ListItemText>
-        </ListItem>
-        <ListItem
-          button
-          selected={location.pathname === '/app/dashboard/students'}
-          component={AdapterLink}
-          to="/app/dashboard/students"
-        >
-          <ListItemIcon>
-            <PeopleIcon/>
-          </ListItemIcon>
-          <ListItemText>Students</ListItemText>
+          <ListItemText>Users</ListItemText>
         </ListItem>
       </List>
     </React.Fragment>

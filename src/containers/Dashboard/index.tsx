@@ -1,7 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import {useObserver} from 'mobx-react';
 import {Helmet} from 'react-helmet';
-import {Route, Redirect, RouteChildrenProps} from 'react-router-dom';
+import {Redirect, RouteChildrenProps} from 'react-router-dom';
 
 import {
   AppBar,
@@ -20,11 +20,14 @@ import {
   ExitToApp as ExitToAppIcon,
 } from '@material-ui/icons';
 
+import ProtectedRoute from '../../components/ProtectedRoute';
+
 import HomePage from '../HomePage';
 import DocumentsPage from '../DocumentsPage';
 import DashboardMenu from '../../components/Menu';
-import LecturersPage from '../LecturersPage';
-import StudentsPage from '../StudentsPage';
+import StudentsPage from '../UsersPage';
+
+import {useCredentialStore} from '../../contexts/CredentialStoreContext';
 
 const drawerWidth: number = 240;
 const useStyles = makeStyles((theme: Theme) =>
@@ -56,6 +59,9 @@ const useStyles = makeStyles((theme: Theme) =>
       width: drawerWidth,
     },
     content: {
+      backgroundColor: '#eee',
+      minHeight: '100vh',
+      height: '100%',
       flexGrow: 1,
       padding: theme.spacing(3),
     },
@@ -89,7 +95,13 @@ const Dashboard: React.FC<DashboardProps> = (props) => {
     '/app/dashboard/',
   ];
 
-  return (
+  const credentialStore = useCredentialStore();
+
+  const handleLogoutButton = () => {
+    credentialStore.logout();
+  };
+
+  return useObserver(() => (
     <React.Fragment>
       <Helmet>
         <title>Dashboard</title>
@@ -107,7 +119,7 @@ const Dashboard: React.FC<DashboardProps> = (props) => {
             </IconButton>
             <Typography variant="h5" noWrap className={classes.title}>Dashboard</Typography>
             <div>
-              <IconButton color="inherit">
+              <IconButton onClick={handleLogoutButton} color="inherit">
                 <ExitToAppIcon/>
               </IconButton>
             </div>
@@ -149,18 +161,28 @@ const Dashboard: React.FC<DashboardProps> = (props) => {
           {rootDashboardPaths.includes(location.pathname) && (
             <Redirect to="/app/dashboard/home"/>
           )}
-          <Route path="/app/dashboard/home" component={HomePage}/>
-          <Route path="/app/dashboard/documents" component={DocumentsPage}/>
-          <Route path="/app/dashboard/lecturers" component={LecturersPage}/>
-          <Route path="/app/dashboard/students" component={StudentsPage}/>
+          <ProtectedRoute
+            isAuthenticated={credentialStore.isAuthenticated}
+            isAllowed
+            path="/app/dashboard/home"
+            component={HomePage}
+          />
+          <ProtectedRoute
+            isAuthenticated={credentialStore.isAuthenticated}
+            isAllowed
+            path="/app/dashboard/documents"
+            component={DocumentsPage}
+          />
+          <ProtectedRoute
+            isAuthenticated={credentialStore.isAuthenticated}
+            isAllowed
+            path="/app/dashboard/users"
+            component={StudentsPage}
+          />
         </main>
       </div>
     </React.Fragment>
-  );
-};
-
-Dashboard.propTypes = {
-  window: PropTypes.func,
+  ));
 };
 
 export default Dashboard;
