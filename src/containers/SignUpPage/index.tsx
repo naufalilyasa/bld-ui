@@ -1,10 +1,18 @@
 import React from 'react';
+import {Helmet} from 'react-helmet';
+import {Container} from '@material-ui/core';
+import SignUpForm from './SignUpForm';
 
 const SignUpPage: React.FC<{}> = () => {
   return (
-    <div>
-      Hello from SignUpPage
-    </div>
+    <React.Fragment>
+      <Helmet>
+        <title>Sign Up</title>
+      </Helmet>
+      <Container maxWidth="xs">
+        <SignUpForm/>
+      </Container>
+    </React.Fragment>
   );
 };
 
