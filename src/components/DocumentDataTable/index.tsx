@@ -2,6 +2,7 @@
 import React from 'react';
 import MUIDataTable, {MUIDataTableColumn, MUIDataTableOptions, MUIDataTableState} from 'mui-datatables';
 import {Typography, CircularProgress} from '@material-ui/core';
+import CustomToolbarSelect from './CustomToolbarSelect';
 
 export interface Document {
   id: number;
@@ -20,12 +21,12 @@ export interface Document {
 export interface DocumentDataTableProps {
   isLoading: boolean,
   data: Array<Document>,
-  page: number,
-  count: number;
-  onTableChange: (action: string, tableState: MUIDataTableState) => void
+  page?: number,
+  count?: number;
+  onTableChange?: (action: string, tableState: MUIDataTableState) => void
 }
 
-const DocumentDataTable: React.FC<DocumentDataTableProps> = ({isLoading, data, page, count, onTableChange}) => {
+const DocumentDataTable: React.FC<DocumentDataTableProps> = ({isLoading, data}) => {
   const columns: Array<MUIDataTableColumn> = [
     {
       name: 'title',
@@ -47,19 +48,22 @@ const DocumentDataTable: React.FC<DocumentDataTableProps> = ({isLoading, data, p
       name: 'location',
       label: 'Location',
     },
-    {
-      name: 'actions',
-      label: 'Actions',
-    },
   ];
+
   const options: MUIDataTableOptions = {
-    serverSide: true,
-    serverSideFilterList: [],
     print: false,
     rowsPerPage: 15,
-    page,
-    count,
-    onTableChange,
+    // eslint-disable-next-line react/display-name
+    customToolbarSelect: (
+        selectedRows: {
+        data: Array<{ index: number; dataIndex: number }>;
+        lookup: { [key: number]: boolean };
+      },
+        displayData: Array<{ data: any[]; dataIndex: number }>,
+        setSelectedRows: (rows: number[]) => void,
+    ) => (
+      <CustomToolbarSelect selectedRows={selectedRows} displayData={displayData} setSelectedRows={setSelectedRows}/>
+    ),
   };
 
   return (
