@@ -75,7 +75,7 @@ const Menu: React.FC<{}> = (props) => {
           </ListItemIcon>
           <ListItemText>Documents</ListItemText>
         </ListItem>
-        <ListItem
+        {/* <ListItem
           button
           selected={location.pathname === '/app/dashboard/users'}
           component={AdapterLink}
@@ -85,7 +85,7 @@ const Menu: React.FC<{}> = (props) => {
             <PeopleIcon/>
           </ListItemIcon>
           <ListItemText>Users</ListItemText>
-        </ListItem>
+        </ListItem> */}
       </List>
     </React.Fragment>
   );

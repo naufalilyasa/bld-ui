@@ -19,14 +19,17 @@ export interface Document {
 }
 
 export interface DocumentDataTableProps {
-  isLoading: boolean,
-  data: Array<Document>,
-  page?: number,
+  title: string;
+  isLoading: boolean;
+  data: Array<Document>;
+  page?: number;
   count?: number;
-  onTableChange?: (action: string, tableState: MUIDataTableState) => void
+  onTableChange?: (action: string, tableState: MUIDataTableState) => void;
+  options?: MUIDataTableOptions;
+  sortByCreatedAt?: boolean;
 }
 
-const DocumentDataTable: React.FC<DocumentDataTableProps> = ({isLoading, data}) => {
+const DocumentDataTable: React.FC<DocumentDataTableProps> = ({title, isLoading, data, options = {}, sortByCreatedAt = false}) => {
   const columns: Array<MUIDataTableColumn> = [
     {
       name: 'title',
@@ -48,9 +51,20 @@ const DocumentDataTable: React.FC<DocumentDataTableProps> = ({isLoading, data}) 
       name: 'location',
       label: 'Location',
     },
+    {
+      name: 'created_at',
+      label: 'Created At',
+    },
   ];
 
-  const options: MUIDataTableOptions = {
+  if (sortByCreatedAt) {
+    columns[5].options = {
+      sort: true,
+      sortDirection: 'desc',
+    };
+  }
+
+  const extendedOptions: MUIDataTableOptions = {
     print: false,
     rowsPerPage: 15,
     // eslint-disable-next-line react/display-name
@@ -62,21 +76,22 @@ const DocumentDataTable: React.FC<DocumentDataTableProps> = ({isLoading, data}) 
         displayData: Array<{ data: any[]; dataIndex: number }>,
         setSelectedRows: (rows: number[]) => void,
     ) => (
-      <CustomToolbarSelect selectedRows={selectedRows} displayData={displayData} setSelectedRows={setSelectedRows}/>
+      <CustomToolbarSelect data={data} selectedRows={selectedRows} displayData={displayData} setSelectedRows={setSelectedRows}/>
     ),
+    ...options,
   };
 
   return (
     <MUIDataTable
       title={
         <Typography variant="h6">
-          Document List
+          {title}
           {isLoading && <CircularProgress size={24} style={{marginLeft: 15, position: 'relative', top: 4}} />}
         </Typography>
       }
       data={data}
       columns={columns}
-      options={options}
+      options={extendedOptions}
     />
   );
 };

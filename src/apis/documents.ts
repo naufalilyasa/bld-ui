@@ -25,6 +25,50 @@ export const getAll = (params: any = ''): AxiosPromise => {
   });
 };
 
+export const borrowDocuments = (ids: string): AxiosPromise => {
+  return documentApi.request({
+    method: 'POST',
+    url: '/api/borrowers/borrows',
+    data: {
+      ids,
+    },
+  });
+};
+
+export const returnDocuments = (ids: string): AxiosPromise => {
+  return documentApi.request({
+    method: 'PATCH',
+    url: '/api/borrowers/returns',
+    data: {
+      ids,
+    },
+  });
+};
+
+export const confirmDocuments = (ids: string): AxiosPromise => {
+  return documentApi.request({
+    method: 'PATCH',
+    url: '/api/borrowers/confirms',
+    data: {
+      ids,
+    },
+  });
+};
+
+export const deleteDocuments = (ids: string): AxiosPromise => {
+  return documentApi.request({
+    method: 'DELETE',
+    url: '/api/documents',
+    data: {
+      ids,
+    },
+  });
+};
+
 export default {
   getAll,
+  borrowDocuments,
+  returnDocuments,
+  confirmDocuments,
+  deleteDocuments,
 };

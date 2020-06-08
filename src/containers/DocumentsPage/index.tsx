@@ -64,19 +64,13 @@ const DocumentsPage: React.FC<{}> = () => {
   // };
 
   // const handleTableChange = (action: string, tableState: MUIDataTableState) => {
-  //   switch (action) {
-  //     case 'changePage':
-  //       handleChangePage(tableState.page + 1);
-  //       break;
-  //     case 'changeRowsPerPage':
-  //       handleChangeRowsPerPage(tableState.rowsPerPage, tableState.page + 1);
-  //       break;
-  //   }
+  //   console.log(action);
   // };
 
   return (
     <div>
       <DocumentDataTable
+        title="Document List"
         isLoading={isLoading}
         data={data.data}
       />
