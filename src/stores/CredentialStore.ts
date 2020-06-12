@@ -104,6 +104,18 @@ export class CredentialStore implements Credential {
     }
   }
 
+  get fullName(): string {
+    if (!this.access_token) return '';
+
+    try {
+      const payload = JSON.parse(atob(this.access_token.split('.')[1]));
+
+      return payload.user?.name || '';
+    } catch (error) {
+      return '';
+    }
+  }
+
   login(email: string, password: string) {
     this.isLoading = true;
 

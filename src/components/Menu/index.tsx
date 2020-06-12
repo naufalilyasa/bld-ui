@@ -20,8 +20,10 @@ import {
 import {
   Home as HomeIcon,
   Assignment as DocumentIcon,
-  Group as PeopleIcon,
+  // Group as PeopleIcon,
 } from '@material-ui/icons';
+import {useObserver} from 'mobx-react';
+import {useCredentialStore} from '../../contexts/CredentialStoreContext';
 
 const useStyles = makeStyles({
   avatar: {
@@ -39,15 +41,17 @@ const Menu: React.FC<{}> = (props) => {
   const classes = useStyles();
   const location = useLocation();
 
-  return (
+  const credentialStore = useCredentialStore();
+
+  return useObserver(() => (
     <React.Fragment>
       <Box padding={2}>
         <Grid container alignItems="center" spacing={2}>
           <Grid item>
-            <Avatar className={classes.avatar}>A</Avatar>
+            <Avatar className={classes.avatar}>{credentialStore.fullName.substring(0, 1)}</Avatar>
           </Grid>
           <Grid item>
-            <Typography>Alexandria</Typography>
+            <Typography>{credentialStore.fullName}</Typography>
           </Grid>
         </Grid>
       </Box>
@@ -88,7 +92,7 @@ const Menu: React.FC<{}> = (props) => {
         </ListItem> */}
       </List>
     </React.Fragment>
-  );
+  ));
 };
 
 export default Menu;
