@@ -2,6 +2,12 @@
 	"folders": [
 		{
 			"path": "."
+		},
+		{
+			"path": "..\\310520-naufal\\spectre"
+		},
+		{
+			"path": "..\\bld-django"
 		}
 	],
 	"settings": {

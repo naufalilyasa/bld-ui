@@ -11,6 +11,8 @@ import {
 import documentApi from '../../apis/documents';
 import Swal from 'sweetalert2';
 import {Document} from '.';
+import ViewDocument from '../ViewDocument';
+import EditDocument from '../EditDocument';
 
 export interface CustomToolbarSelectProps {
   data: Array<Document>;
@@ -123,18 +125,53 @@ const CustomToolbarSelect: React.FC<CustomToolbarSelectProps> = ({data, selected
     });
   };
 
+  const [viewDocumentOpen, setViewDocumentOpen] = React.useState(false);
+  const [editDocumentOpen, setEditDocumentOpen] = React.useState(false);
+
+  const toggleViewDocument = () => {
+    setViewDocumentOpen(!viewDocumentOpen);
+  };
+
+  const toggleEditDocument = () => {
+    setEditDocumentOpen(!editDocumentOpen);
+  };
+
   return (
     <Box marginRight="24px">
-      <Tooltip title="View document">
-        <IconButton disabled={selectedRows.data.length > 1}>
-          <VisibilityIcon/>
-        </IconButton>
-      </Tooltip>
-      <Tooltip title="Edit document">
-        <IconButton disabled={selectedRows.data.length > 1}>
-          <EditIcon/>
-        </IconButton>
-      </Tooltip>
+      <ViewDocument
+        open={viewDocumentOpen}
+        onClose={toggleViewDocument}
+        documentId={data[selectedRows.data[0].dataIndex].id}
+      />
+      <EditDocument
+        open={editDocumentOpen}
+        onClose={toggleEditDocument}
+        documentId={data[selectedRows.data[0].dataIndex].id}
+      />
+      {selectedRows.data.length > 1 ? (
+        <React.Fragment>
+          <IconButton disabled onClick={toggleViewDocument}>
+            <VisibilityIcon/>
+          </IconButton>
+          <IconButton disabled>
+            <EditIcon/>
+          </IconButton>
+        </React.Fragment>
+
+      ): (
+        <React.Fragment>
+          <Tooltip title="View document">
+            <IconButton onClick={toggleViewDocument}>
+              <VisibilityIcon/>
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Edit document">
+            <IconButton onClick={toggleEditDocument}>
+              <EditIcon/>
+            </IconButton>
+          </Tooltip>
+        </React.Fragment>
+      )}
       <Tooltip title="Borrow document(s)">
         <IconButton onClick={handleBorrowDocuments}>
           <AssignmentIcon/>

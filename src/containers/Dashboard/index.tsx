@@ -28,6 +28,7 @@ import DashboardMenu from '../../components/Menu';
 import StudentsPage from '../UsersPage';
 
 import {useCredentialStore} from '../../contexts/CredentialStoreContext';
+import {DocumentsProvider} from '../../components/DocumentDataTable/Context';
 
 const drawerWidth: number = 240;
 const useStyles = makeStyles((theme: Theme) =>
@@ -161,18 +162,22 @@ const Dashboard: React.FC<DashboardProps> = (props) => {
           {rootDashboardPaths.includes(location.pathname) && (
             <Redirect to="/app/dashboard/home"/>
           )}
-          <ProtectedRoute
-            isAuthenticated={credentialStore.isAuthenticated}
-            isAllowed
-            path="/app/dashboard/home"
-            component={HomePage}
-          />
-          <ProtectedRoute
-            isAuthenticated={credentialStore.isAuthenticated}
-            isAllowed
-            path="/app/dashboard/documents"
-            component={DocumentsPage}
-          />
+          <DocumentsProvider>
+            <ProtectedRoute
+              isAuthenticated={credentialStore.isAuthenticated}
+              isAllowed
+              path="/app/dashboard/home"
+              component={HomePage}
+            />
+          </DocumentsProvider>
+          <DocumentsProvider>
+            <ProtectedRoute
+              isAuthenticated={credentialStore.isAuthenticated}
+              isAllowed
+              path="/app/dashboard/documents"
+              component={DocumentsPage}
+            />
+          </DocumentsProvider>
           <ProtectedRoute
             isAuthenticated={credentialStore.isAuthenticated}
             isAllowed

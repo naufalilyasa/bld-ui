@@ -1,28 +1,17 @@
-import React, {useState, useEffect} from 'react';
-import {AxiosResponse} from 'axios';
+import React, {useEffect, useContext} from 'react';
+import {useObserver} from 'mobx-react';
 
 import DocumentDataTable from '../../components/DocumentDataTable';
-
-
-import {DocumentResource} from '../DocumentsPage';
-
-import documentApi from '../../apis/documents';
+import {DocumentsContext} from '../../components/DocumentDataTable/Context';
 
 const HomePage: React.FC<{}> = (props) => {
-  const [isLoading, setLoading] = useState(false);
-  const [data, setData] = useState({} as DocumentResource);
+  const documentContext = useContext(DocumentsContext);
 
   useEffect(() => {
-    if (!data.data) {
-      setLoading(true);
-      documentApi.getAll()
-          .then((response: AxiosResponse) => {
-            setData(response.data);
-            setLoading(false);
-          });
+    if (!documentContext.data.data) {
+      documentContext.refresh();
     }
-  }, [data]);
-
+  }, []);
   // const handleChangeRowsPerPage = (rows: number, page: number) => {
   //   setLoading(true);
   //   documentApi.getAll({rows, page})
@@ -45,16 +34,16 @@ const HomePage: React.FC<{}> = (props) => {
   //   console.log(action);
   // };
 
-  return (
+  return useObserver(() => (
     <div>
       <DocumentDataTable
         title="Latest Document List"
-        isLoading={isLoading}
-        data={data.data}
+        isLoading={documentContext.loading}
+        data={documentContext.data.data}
         sortByCreatedAt
       />
     </div>
-  );
+  ));
 };
 
 export default HomePage;

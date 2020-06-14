@@ -1,9 +1,9 @@
 /* eslint-disable camelcase */
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 
 import DocumentDataTable, {Document} from '../../components/DocumentDataTable';
-import documentApi from '../../apis/documents';
-import {AxiosResponse} from 'axios';
+import {useObserver} from 'mobx-react';
+import {DocumentsContext} from '../../components/DocumentDataTable/Context';
 // import {MUIDataTableState} from 'mui-datatables';
 
 export interface DocumentLinks {
@@ -31,19 +31,13 @@ export interface DocumentResource {
 }
 
 const DocumentsPage: React.FC<{}> = () => {
-  const [isLoading, setLoading] = useState(false);
-  const [data, setData] = useState({} as DocumentResource);
+  const documentContext = useContext(DocumentsContext);
 
   useEffect(() => {
-    if (!data.data) {
-      setLoading(true);
-      documentApi.getAll()
-          .then((response: AxiosResponse) => {
-            setData(response.data);
-            setLoading(false);
-          });
+    if (!documentContext.data.data) {
+      documentContext.refresh();
     }
-  }, [data]);
+  }, []);
 
   // const handleChangeRowsPerPage = (rows: number, page: number) => {
   //   setLoading(true);
@@ -67,15 +61,15 @@ const DocumentsPage: React.FC<{}> = () => {
   //   console.log(action);
   // };
 
-  return (
+  return useObserver(() => (
     <div>
       <DocumentDataTable
         title="Document List"
-        isLoading={isLoading}
-        data={data.data}
+        isLoading={documentContext.loading}
+        data={documentContext.data.data}
       />
     </div>
-  );
+  ));
 };
 
 export default DocumentsPage;
