@@ -44,8 +44,8 @@ const DocumentDataTable: React.FC<DocumentDataTableProps> = ({title, isLoading, 
       label: 'Publisher',
     },
     {
-      name: 'items_available',
-      label: 'Items Available',
+      name: 'status',
+      label: 'Status',
     },
     {
       name: 'location',
